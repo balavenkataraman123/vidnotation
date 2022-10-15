@@ -5,6 +5,9 @@ import time
 import mimetypes
 from datetime import datetime
 from urllib import response
+import base64
+from PIL import Image, ImageGrab
+import cv2
 
 from flask import Flask, Response, render_template, send_file, request
 path = "nuts"
@@ -13,6 +16,8 @@ currenttimestamp = 0
 app = Flask(__name__)
 
 VIDEO_PATH = '/video'
+VIDEO_WIDTH = 640
+VIDEO_HEIGHT=360
 
 MB = 1 << 20
 BUFF_SIZE = 10 * MB   
@@ -76,17 +81,40 @@ def index():
     elif request.method == 'POST':
         data_url = request.values.get('image')
         print(data_url)
+        currenttimestamp = float(data_url)
         try:
             os.remove("frameeee.jpg")
         except:
             print('nuts')
         os.system("ffmpeg -i " + path + " -ss " + data_url + " -frames 1 frameeee.jpg")
+        return "nuts"
 @app.route('/draw1', methods = ['GET', 'POST'])
 def draw():
     if request.method == 'GET':
         return render_template('index2.html')
+    elif request.method == 'POST': 
+        print("yeeeeet")
+        data_url = request.values.get('image')
+        timestamplen = request.values.get('timestamp')
+        content = data_url.split(';')[1]
+        im_b64 = content.split(',')[1]
+        im_bytes = base64.b64decode(im_b64)
+        print(timestamplen)
+        print(currenttimestamp)
+        imgdata = base64.b64decode(im_b64)
+        filename = "imagelmao.png"
+        with open(filename, 'wb') as f:
+            f.write(imgdata)
+        img = cv2.imread("imagelmao.png")
 
-
+        dim = (VIDEO_WIDTH, VIDEO_HEIGHT)
+        
+        img1 = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+        os.remove("imagelmao.png")
+        cv2.imwrite("imagelmao.png", img1)
+        os.system(f"ffmpeg -y -i videos/demo.mp4 -i imagelmao.png -filter_complex \"[1][0]scale2ref[i][m];[m][i]overlay[v] \"-map \"[v]\" -map 0:a? -ac 2 output.mp4")
+        #;enable='between(t,{str(currenttimestamp)},{str(float(currenttimestamp) + float(timestamplen))})        
+        return "nuts"
 @app.route(VIDEO_PATH)
 def video():
     global path
@@ -97,7 +125,6 @@ def video():
 def image():
     filename = "frameeee.jpg"
     return send_file(filename, mimetype='image/gif')
-
 
 
 if __name__ == '__main__':

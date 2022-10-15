@@ -31,16 +31,15 @@ function save() {
       var dataaaa = document.getElementById("timer").innerHTML;
       var xhr = new XMLHttpRequest()
       xhr.onreadystatechange = function() {
-      if (xhr.readyState == XMLHttpRequest.DONE) {
-          alert(xhr.responseText);
-        }
-      }         
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            window.location.replace("/draw1");         
+          }
+        }         
       const data = new FormData()
       console.log(data)
       data.append('image', dataaaa)
       xhr.open('POST', '/draw')
-      xhr.send(data)
-      window.location.replace("/draw1");
+      xhr.send(data)      
 
 
 
