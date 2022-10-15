@@ -1,12 +1,49 @@
-<html>
-  <h1>
-    Properly Epic New Innovative Stream
-  </h1>
-  <video
-     src="{{ video }}"
-     width="800"
-     height="400"
-     controls
-     >
-  </video>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P.E.N.I.S </title>
+
+    <link href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body onload = "settime()">
+    <h1>Properly Epic New Innovative Stream</h1>
+    <video src="{{ video }}" id="myVideo" width="1280" height="720" controls></video>
+
+<div id="timer"> timer </div>
+<div id="starttime"> {{timestamp}} </div>
+<button onclick="save()">Annotate</button>
+</body>
+<script>
+  document.getElementById("myVideo").addEventListener('timeupdate', function() {
+      document.getElementById("timer").innerHTML = this.currentTime;
+      currentTime = this.currentTime; 
+    
+  });
+function settime(){
+  vid = document.getElementById("myVideo");
+  vid.currentTime = document.getElementById("starttime").innerHTML
+}
+
+function save() {
+      var dataaaa = document.getElementById("timer").innerHTML;
+      var xhr = new XMLHttpRequest()
+      xhr.onreadystatechange = function() {
+      if (xhr.readyState == XMLHttpRequest.DONE) {
+          alert(xhr.responseText);
+        }
+      }         
+      const data = new FormData()
+      console.log(data)
+      data.append('image', dataaaa)
+      xhr.open('POST', '/draw')
+      xhr.send(data)
+      window.location.replace("/draw1");
+
+
+
+}
+</script>
 </html>
