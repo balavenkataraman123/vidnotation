@@ -14,56 +14,161 @@
 
     <div class="sidebar" style="display: none;">
         <h1 class="video-name">{{ video }}</h1>
-        <span class="video-info"><span class="no-annot">_</span>&nbspAnnotations | <span class="no-bookm">_</span>&nbspBookmarks</span>
+        <span class="video-info"><span class="no-annot">_</span>&nbspAnnotations | <span class="no-notes">_</span>&nbspNotes</span>
 
         <div class="create-buttons">
             <button class="annot-now-btn create-btn">Annotate</button>
-            <button class="bookm-now-btn create-btn">Bookmark</button>
+            <button class="bookm-now-btn create-btn">Note</button>
         </div>
     </div>
-    <!-- <div id="timer"> timer </div> -->
-    <!-- <button onclick="save()">Annotate</button> -->
+
+    <div class="drawing-controls">
+        <div class="pen-tools">
+            <div class="pen-tool selected pen-tool-pen" data-tool="pen" onclick="set_tool(this);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                </svg>
+            </div>
+            <div class="pen-tool pen-tool-eraser" data-tool="eraser" onclick="set_tool(this);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-eraser" viewBox="0 0 16 16">
+                    <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm2.121.707a1 1 0 0 0-1.414 0L4.16 7.547l5.293 5.293 4.633-4.633a1 1 0 0 0 0-1.414l-3.879-3.879zM8.746 13.547 3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z"/>
+                </svg>
+            </div>
+            <div class="pen-tool pen-tool-lasso" data-tool="lasso" onclick="set_tool(this);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bounding-box-circles" viewBox="0 0 16 16">
+                    <path d="M2 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zM0 2a2 2 0 0 1 3.937-.5h8.126A2 2 0 1 1 14.5 3.937v8.126a2 2 0 1 1-2.437 2.437H3.937A2 2 0 1 1 1.5 12.063V3.937A2 2 0 0 1 0 2zm2.5 1.937v8.126c.703.18 1.256.734 1.437 1.437h8.126a2.004 2.004 0 0 1 1.437-1.437V3.937A2.004 2.004 0 0 1 12.063 2.5H3.937A2.004 2.004 0 0 1 2.5 3.937zM14 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zM2 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm12 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                </svg>
+            </div>
+            
+        </div>
+        <div class="pen-colour-controls">
+            <div class="pen-colour selected pen-colour-black" data-colour="#000000" onclick="set_colour(this);">
+
+            </div>
+            <div class="pen-colour pen-colour-blue" data-colour="#3165bb" onclick="set_colour(this);">
+                
+            </div>
+            <div class="pen-colour pen-colour-red" data-colour="#ed1b24" onclick="set_colour(this);">
+                
+            </div>
+            <div class="pen-colour pen-colour-green" data-colour="#177c36" onclick="set_colour(this);">
+
+            </div>
+            <div class="pen-colour pen-colour-gray" data-colour="#808080" onclick="set_colour(this);">
+
+            </div>
+            <div class="pen-colour pen-colour-yellow" data-colour="#fef200" onclick="set_colour(this);">
+                
+            </div>
+            <div class="pen-colour pen-colour-orange" data-colour="#ff7f00" onclick="set_colour(this);">
+
+            </div>
+            <div class="pen-colour pen-colour-purple" data-colour="#9966cc" onclick="set_colour(this);">
+                
+            </div>
+            <div class="pen-colour pen-colour-brown" data-colour="#774931" onclick="set_colour(this);">
+
+            </div>
+            <div class="pen-colour pen-colour-pink" data-colour="#ffa6cc" onclick="set_colour(this);">
+
+            </div>
+        </div>
+        <div class="pen-size-controls">
+            <div class="pen-size pen-size-sm" data-size="2" onclick="set_size(this);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bounding-box-circles" viewBox="0 0 16 16">
+                    <path d="M 0 0 L 50 50" stroke="black" stroke-width="0.5"/>
+                </svg>
+            </div>
+            <div class="pen-size selected pen-size-md" data-size="5" onclick="set_size(this);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bounding-box-circles" viewBox="0 0 16 16">
+                    <path d="M 0 0 L 50 50" stroke="black" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="pen-size pen-size-l" data-size="10" onclick="set_size(this);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bounding-box-circles" viewBox="0 0 16 16">
+                    <path d="M 0 0 L 50 50" stroke="black" stroke-width="3"/>
+                </svg>
+            </div>
+            <div class="pen-size pen-size-xl" data-size="20" onclick="set_size(this);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bounding-box-circles" viewBox="0 0 16 16">
+                    <path d="M 0 0 L 50 50" stroke="black" stroke-width="5"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="annotation-controls">
+            <div class="save-annotation">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-save2-fill" viewBox="0 0 16 16">
+                    <path d="M8.5 1.5A1.5 1.5 0 0 1 10 0h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h6c-.314.418-.5.937-.5 1.5v6h-2a.5.5 0 0 0-.354.854l2.5 2.5a.5.5 0 0 0 .708 0l2.5-2.5A.5.5 0 0 0 10.5 7.5h-2v-6z"/>
+                </svg>
+            </div>
+            <div class="cancel-annotation">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <canvas class="ann-canv" width="">
+
+    </canvas>
+
+    <div class="modal-backdrop">
+        <div class="modal-body s-ann-modal">
+            E
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='drawing.js') }}"></script>
 </body>
 
 <script>
-    document.querySelector('#myVideo').addEventListener('mousemove', function() {
-        if (document.querySelector('.sidebar').style.display != "block") {
-            document.querySelector('.sidebar').style.display = "block";
-        }
-        setTimeout(function () {
-            if (document.querySelectorAll('.sidebar:hover').length == 0)
-            {
-                document.querySelector('.sidebar').style.display = "none";
-            }
-        }, 3000);
-})
-</script>
+document.addEventListener('DOMContentLoaded', function () {
+    var block_sidebar = false;
 
-<script>
-    document.getElementById("myVideo").addEventListener('timeupdate', function() {
-        document.getElementById("timer").innerHTML = this.currentTime;
-        currentTime = this.currentTime; 
+    document.querySelector('#myVideo').addEventListener('mousemove', function() {
+        if (!block_sidebar) {
+            if (document.querySelector('.sidebar').style.display != "block") {
+                document.querySelector('.sidebar').style.display = "block";
+            }
+            setTimeout(function () {
+                if (document.querySelectorAll('.sidebar:hover').length == 0)
+                {
+                    document.querySelector('.sidebar').style.display = "none";
+                }
+            }, 3000);
+        }
     });
 
-    function settime(){
-        vid = document.getElementById("myVideo");
-        vid.currentTime = document.getElementById("starttime").innerHTML
+    document.querySelector('.annot-now-btn').onclick = function() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        document.querySelector('.drawing-controls').style.visibility = "visible";
+        document.querySelector('.ann-canv').style.pointerEvents = "all";
+        block_sidebar = true;
+        document.querySelector('.sidebar').style.display = "none";
     }
 
-function save() {
-    var dataaaa = document.getElementById("timer").innerHTML;
-    var xhr = new XMLHttpRequest()
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == XMLHttpRequest.DONE) {
-            window.location.replace("/draw1");
-        }
+    document.querySelector('.cancel-annotation').onclick = function() {
+        strokes = [];
+        currstroke = [];
+        undone = [];
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        document.querySelector('.drawing-controls').style.visibility = "hidden";
+        document.querySelector('.ann-canv').style.pointerEvents = "none";
+        block_sidebar = false;
     }
 
-    const data = new FormData()
-    console.log(data)
-    data.append('image', dataaaa)
-    xhr.open('POST', '/draw')
-    xhr.send(data)
-}
+    document.querySelector('.save-annotation').onclick = function() {
+        strokes = [];
+        currstroke = [];
+        undone = [];
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        document.querySelector('.drawing-controls').style.visibility = "hidden";
+        document.querySelector('.ann-canv').style.pointerEvents = "none";
+        block_sidebar = false;
+    }
+});
 </script>
 </html>

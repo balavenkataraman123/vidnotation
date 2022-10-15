@@ -13,6 +13,18 @@
     bottom: 0;
     min-width: 100%;
     min-height: 100%;
+    z-index: 200;
+}
+
+.ann-canv {
+    position: fixed;
+    right: 0;
+    top: 0;
+    min-width: 100%;
+    min-height: 100%;
+    pointer-events: none;
+    touch-action: none;
+    z-index: 250;
 }
 
 @-webkit-keyframes fadeIn {
@@ -34,6 +46,7 @@
     -webkit-animation: fadeIn 0.5s;
     animation: fadeIn 0.5s;
     text-align: center;
+    z-index: 300;
 }
 
 .video-name {
@@ -62,71 +75,120 @@
     background-color: #2980b9;
 }
 
-#colorButtonBox {
+.drawing-controls {
+    display: flex;
     position: absolute;
-    background-color: rgb(210,210,210);
-    padding: 5px;
-    margin: 5px;
+    left: 20px;
+    bottom: 20px;
+    z-index: 400;
+    padding: 20px;
+    background-color: #bdc3c7;
+    opacity: 0.8;
     border-radius: 10px;
+    visibility: hidden;
+}
+
+.pen-tools {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 30px;
+}
+
+.pen-tool {
+    width: 24px;
+    height: 24PX;
+    margin: 5px;
+}
+
+.pen-colour-controls {
+    display: flex;
+    margin-right: 30px;
+}
+
+.pen-colour {
+    width: 24px;
+    height: 24px;
+    border: 1px solid black;
+    margin: 2px;
+    outline: 0;
+}
+
+.pen-size-controls {
+    display: flex;
+}
+
+.pen-size {
+    width: 24px;
+    height: 24px;
+    margin: 5px;
+}
+
+.selected {
+    outline: 3px solid #ffffff;
+}
+
+.pen-colour-black {
+    background-color: #000000;
+}
+
+.pen-colour-blue {
+    background-color: #3165bb;
+}
+
+.pen-colour-red {
+    background-color: #ed1b24;
+}
+
+.pen-colour-green {
+    background-color: #177c36;
+}
+
+.pen-colour-gray {
+    background-color: #808080;
+}
+
+.pen-colour-yellow {
+    background-color: #fef200;
+}
+
+.pen-colour-orange {
+    background-color: #ff7f00;
+}
+
+.pen-colour-purple {
+    background-color: #9966cc;
+}
+
+.pen-colour-brown {
+    background-color: #774931;
+}
+
+.pen-colour-pink {
+    background-color: #ffa6cc;
+}
+
+.annotation-controls {
+    display: flex;
+}
+
+.save-annotation {
+    margin: 5px;
+    margin-left: 30px;
+}
+
+.cancel-annotation {
+    margin: 5px;
+    margin-left: 20px;
+}
+
+.modal-backdrop {
+    position: fixed;
+    right: 0;
     bottom: 0;
-}
-
-#colorButton {
-    transition: .1s linear;
-    position: relative;
-    float: left;
-    margin: 5px;
-    border-radius: 5px;
-    width: 40px;
-    height: 40px;
-    z-index: 3;
-}
-
-#eraserButton {
-    transition: .1s linear;
-    position: relative;
-    float: left;
-    margin: 5px;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    z-index: 3;
-    background-color: white;
-}
-
-#eraserButton:hover {
-    width: 30px;
-    height: 30px;
-    margin: 10px;
-}
-
-#colorButton:hover {
-    transition: .1s linear;
-    width: 45px;
-    height: 45px;
-    margin :2.5px;
-}
-
-.black {
+    min-width: 100%;
+    min-height: 100%;
     background-color: black;
-}
-
-.blue {
-    background-color: blue;
-}
-
-.red {
-    background-color: red;
-}
-
-.green {
-    background-color: green;
-}
-
-.yellow {
-    background-color: yellow;
-}
-
-.gray{
-    background-color: gray;
+    opacity: 0.7;
+    z-index: 500;
+    visibility: hidden;
 }

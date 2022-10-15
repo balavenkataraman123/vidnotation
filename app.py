@@ -79,54 +79,7 @@ def get_range(request):
         return start, end
     else:
         return 0, None
-    
-@app.route('/draw', methods = ['GET','POST'])
-def draw():
-    global currenttimestamp
-    if request.method == 'GET':
-        return render_template('index.html')
-    elif request.method == 'POST':
-        data_url = request.values.get('image')
-        print(data_url)
-        currenttimestamp = float(data_url)
-        try:
-            os.remove("frameeee.jpg")
-        except:
-            print('nuts')
-        os.system(f"{FFMPEG_PATH} -i " + path + " -ss " + data_url + " -frames 1 frameeee.jpg")
-        return "nuts"
 
-@app.route('/draw1', methods = ['GET', 'POST'])
-def draw1():
-    if request.method == 'GET':
-        return render_template('index2.html')
-    elif request.method == 'POST': 
-        print("yeeeeet")
-        data_url = request.values.get('image')
-        timestamplen = request.values.get('timestamp')
-        content = data_url.split(';')[1]
-        im_b64 = content.split(',')[1]
-        im_bytes = base64.b64decode(im_b64)
-        print(timestamplen)
-        print(currenttimestamp)
-        imgdata = base64.b64decode(im_b64)
-        filename = "imagelmao.png"
-        with open(filename, 'wb') as f:
-            f.write(imgdata)
-        img = cv2.imread("imagelmao.png")
-
-        dim = (VIDEO_WIDTH, VIDEO_HEIGHT)
-        
-        img1 = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        os.remove("imagelmao.png")
-        cv2.imwrite("imagelmao.png", img1)
-        os.system(f"{FFMPEG_PATH} -y -i videos/demo.mp4 -i imagelmao.png -filter_complex \"[1][0]scale2ref[i][m];[m][i]overlay[v] \"-map \"[v]\" -map 0:a? -ac 2 output.mp4")
-        return "nuts"
-
-@app.route('/images')
-def image():
-    filename = "frameeee.jpg"
-    return send_file(filename, mimetype='image/gif')
 
 
 if __name__ == '__main__':
