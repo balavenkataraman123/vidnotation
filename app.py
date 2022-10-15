@@ -1,14 +1,6 @@
-import logging
 import os
 import re
-import time
 import mimetypes
-from datetime import datetime
-from urllib import response
-import base64
-from PIL import Image, ImageGrab
-import cv2
-
 from flask import Flask, Response, render_template, send_file, request
 
 app = Flask(__name__)
