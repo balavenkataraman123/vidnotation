@@ -187,8 +187,32 @@
     bottom: 0;
     min-width: 100%;
     min-height: 100%;
-    background-color: black;
-    opacity: 0.7;
+    background-color: rgba(0,0,0,0.7);
     z-index: 500;
-    visibility: hidden;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    /* visibility: hidden; */
+}
+
+.modal-body {
+    width: 500px;
+    background-color: rgba(255,255,255,1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.modal-title {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333333;
+}
+
+.modal-content {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.modal-footer {
+    padding-top: 10px;
+    border-bottom: 1px solid #333333;
 }
