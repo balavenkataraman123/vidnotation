@@ -10,8 +10,6 @@ from PIL import Image, ImageGrab
 import cv2
 
 from flask import Flask, Response, render_template, send_file, request
-path = "nuts"
-currenttimestamp = 0
 
 app = Flask(__name__)
 
@@ -24,9 +22,9 @@ FFMPEG_PATH = "C:/Users/Admin/ffmpeg/bin/ffmpeg.exe"
 MB = 1 << 20
 BUFF_SIZE = 10 * MB   
 
-@app.route('/')
-def home():
-    response = render_template('index.html', video=VIDEO_PATH, timestamp=69)
+@app.route(f'/play/<video>')
+def home(video):
+    response = render_template('index.html', path=f'{VIDEO_PATH}/{video}', video=video)
     print('deez nuts')
     return response
 
@@ -62,6 +60,13 @@ def partial_response(path, start, end=None):
     )
     return response
 
+@app.route(f'{VIDEO_PATH}/<video>')
+def video(video):
+    global path
+    path = f'.{VIDEO_PATH}/{video}'
+    start, end = get_range(request)
+    return partial_response(path, start, end)
+
 def get_range(request):
     range = request.headers.get('Range')
     m = re.match('bytes=(?P<start>\d+)-(?P<end>\d+)?', range)
@@ -76,7 +81,7 @@ def get_range(request):
         return 0, None
     
 @app.route('/draw', methods = ['GET','POST'])
-def index():
+def draw():
     global currenttimestamp
     if request.method == 'GET':
         return render_template('index.html')
@@ -92,7 +97,7 @@ def index():
         return "nuts"
 
 @app.route('/draw1', methods = ['GET', 'POST'])
-def draw():
+def draw1():
     if request.method == 'GET':
         return render_template('index2.html')
     elif request.method == 'POST': 
@@ -117,13 +122,6 @@ def draw():
         cv2.imwrite("imagelmao.png", img1)
         os.system(f"{FFMPEG_PATH} -y -i videos/demo.mp4 -i imagelmao.png -filter_complex \"[1][0]scale2ref[i][m];[m][i]overlay[v] \"-map \"[v]\" -map 0:a? -ac 2 output.mp4")
         return "nuts"
-
-@app.route(VIDEO_PATH)
-def video():
-    global path
-    path = 'videos/demo.mp4'
-    start, end = get_range(request)
-    return partial_response(path, start, end)
 
 @app.route('/images')
 def image():

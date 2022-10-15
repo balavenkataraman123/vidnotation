@@ -9,14 +9,35 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
-<body onload = "settime()">
-    <h1>Properly Epic New Innovative Stream</h1>
-    <video src="{{ video }}" id="myVideo" width="1280" height="720" controls></video>
+<body>
+    <video src="{{ path }}" id="myVideo" controls></video>
 
-    <div id="timer"> timer </div>
-    <div id="starttime"> {{timestamp}} </div>
-    <button onclick="save()">Annotate</button>
+    <div class="sidebar" style="display: none;">
+        <h1 class="video-name">{{ video }}</h1>
+        <span class="video-info"><span class="no-annot">_</span>&nbspAnnotations | <span class="no-bookm">_</span>&nbspBookmarks</span>
+
+        <div class="create-buttons">
+            <button class="annot-now-btn create-btn">Annotate</button>
+            <button class="bookm-now-btn create-btn">Bookmark</button>
+        </div>
+    </div>
+    <!-- <div id="timer"> timer </div> -->
+    <!-- <button onclick="save()">Annotate</button> -->
 </body>
+
+<script>
+    document.querySelector('#myVideo').addEventListener('mousemove', function() {
+        if (document.querySelector('.sidebar').style.display != "block") {
+            document.querySelector('.sidebar').style.display = "block";
+        }
+        setTimeout(function () {
+            if (document.querySelectorAll('.sidebar:hover').length == 0)
+            {
+                document.querySelector('.sidebar').style.display = "none";
+            }
+        }, 3000);
+})
+</script>
 
 <script>
     document.getElementById("myVideo").addEventListener('timeupdate', function() {
