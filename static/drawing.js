@@ -29,6 +29,13 @@ document.addEventListener('resize', (event) => {
     canvas.height = window.innerHeight;
 });
 
+function clear() {
+    strokes = [];
+    currstroke = [];
+    undone = [];
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 function midpoint(p1, p2) {
     return {
         x: p1.x + (p2.x - p1.x) / 2,

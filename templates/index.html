@@ -121,10 +121,12 @@
                 <h2>Save Annotation</h2>
             </div>
             <div class="modal-content">
-                E
+                <input type="number" name="" id="ann-length-sec" class="ann-length-inp" placeholder="Number of seconds">
+                <input type="number" name="" id="ann-length-frame" class="ann-length-inp" placeholder="Number of frames">
             </div>
             <div class="modal-footer">
-                EE
+                <button class="s-ann-so s-ann-save">Save</button>
+                <button class="s-ann-so s-ann-cancel">Cancel</button>
             </div>
         </div>
     </div>
@@ -135,6 +137,16 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var block_sidebar = false;
+    var fps = {{ fps }};
+
+    function clear_annotation () {
+        clear();
+        document.querySelector('.drawing-controls').style.visibility = "hidden";
+        document.querySelector('.ann-canv').style.pointerEvents = "none";
+        document.querySelector('.modal-backdrop').style.visibility = 'hidden';
+        document.querySelector('.s-ann-modal').style.visibility = 'hidden';
+        block_sidebar = false;
+    }
 
     document.querySelector('#myVideo').addEventListener('mousemove', function() {
         if (!block_sidebar) {
@@ -156,26 +168,44 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('.ann-canv').style.pointerEvents = "all";
         block_sidebar = true;
         document.querySelector('.sidebar').style.display = "none";
+
+        document.querySelector('#myVideo').pause();
     }
 
     document.querySelector('.cancel-annotation').onclick = function() {
-        strokes = [];
-        currstroke = [];
-        undone = [];
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        document.querySelector('.drawing-controls').style.visibility = "hidden";
-        document.querySelector('.ann-canv').style.pointerEvents = "none";
-        block_sidebar = false;
+        clear_annotation();
     }
 
     document.querySelector('.save-annotation').onclick = function() {
-        strokes = [];
-        currstroke = [];
-        undone = [];
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        document.querySelector('.drawing-controls').style.visibility = "hidden";
-        document.querySelector('.ann-canv').style.pointerEvents = "none";
-        block_sidebar = false;
+        document.querySelector('.modal-backdrop').style.visibility = 'visible';
+        document.querySelector('.s-ann-modal').style.visibility = 'visible';
+    }
+
+    document.querySelector('#ann-length-sec').oninput = function () {
+        document.querySelector('#ann-length-frame').value = document.querySelector('#ann-length-sec').value * fps;
+    }
+
+    document.querySelector('#ann-length-frame').oninput = function () {
+        document.querySelector('#ann-length-sec').value = document.querySelector('#ann-length-frame').value / fps;
+    }
+    
+    document.querySelector('.s-ann-cancel').onclick = function () {
+        clear_annotation();
+    }
+    
+    document.querySelector('.s-ann-save').onclick = function () {
+        r = new XMLHttpRequest();
+        r.open('POST', `/annotate/?video={{ path }}&start=${ Math.floor(document.querySelector('#myVideo').currentTime * fps) }&dur=${ Math.floor(document.querySelector('#ann-length-frame').value) }`);
+        r.onload = () => {
+            if (r.responseText == 'OK') {
+                clear_annotation();
+            }
+            else
+            {
+                alert('Something went wrong')
+            }
+        }
+        r.send(JSON.stringify({'strokes': strokes}));
     }
 });
 </script>

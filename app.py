@@ -1,23 +1,20 @@
+from crypt import methods
 import os
 import re
+import json
 import mimetypes
-from flask import Flask, Response, render_template, send_file, request
+from flask import Flask, Response, render_template, request
 
 app = Flask(__name__)
 
 VIDEO_PATH = '/video'
-VIDEO_WIDTH = 640
-VIDEO_HEIGHT = 360
-
-FFMPEG_PATH = "C:/Users/Admin/ffmpeg/bin/ffmpeg.exe"
 
 MB = 1 << 20
 BUFF_SIZE = 10 * MB   
 
 @app.route(f'/play/<video>')
 def home(video):
-    response = render_template('index.html', path=f'{VIDEO_PATH}/{video}', video=video)
-    print('deez nuts')
+    response = render_template('index.html', path=f'{VIDEO_PATH}/{video}', video=video, fps=25)
     return response
 
 def partial_response(path, start, end=None):
@@ -72,7 +69,27 @@ def get_range(request):
     else:
         return 0, None
 
+@app.route('/annotate/', methods=['GET', 'POST'])
+def annotate():
+    vid = request.args.get('video')
+    start = request.args.get('start')
+    dur = request.args.get('dur')
 
+    if vid and start and dur:
+        fp = f'.{vid}.json'
+        if os.path.isfile(fp):
+            try: jf = json.loads(open(fp).read())
+            except:  jf = {}
+        else: jf = {}
+
+        strokes = {'start': start, 'dur': dur, 'end': start + dur, 'strokes': json.loads(request.data)['strokes']}
+
+        try: jf['annotations'].append(strokes)
+        except KeyError: jf['annotations'] = [strokes]
+
+        with open(fp, 'w+') as f: f.write(json.dumps(jf))
+
+        return "OK"
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000, debug=True)

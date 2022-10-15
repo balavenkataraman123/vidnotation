@@ -192,7 +192,11 @@
     align-items: center;
     display: flex;
     justify-content: center;
-    /* visibility: hidden; */
+    visibility: hidden;
+}
+
+.s-ann-modal {
+    visibility: hidden;
 }
 
 .modal-body {
@@ -213,6 +217,33 @@
 }
 
 .modal-footer {
-    padding-top: 10px;
-    border-bottom: 1px solid #333333;
+    padding-top: 20px;
+    border-top: 1px solid #333333;
+}
+
+.s-ann-modal .modal-content {
+    display: flex;
+    justify-content: space-around;
+}
+
+.ann-length-inp {
+    width: 40%;
+    height: 40px;
+    padding: 5px;
+    font-size: 1em;
+    border: 1px solif #333333;
+    border-radius: 5px;
+    background-color: #ecf0f1;
+}
+
+.s-ann-so {
+    width: 80px;
+    height: 40px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.s-ann-save {
+    background-color: #3498db;
+    color: white;
 }
