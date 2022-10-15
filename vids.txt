@@ -1,0 +1,4 @@
+file 'seggz_0.mp3'
+file 'seggz_1.mp3'
+file 'seggz_2.mp3'
+file 'seggz_3.mp3'

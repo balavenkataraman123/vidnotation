@@ -219,12 +219,14 @@ document.onkeydown = function (e) {
             if (e.key == 'z') {
                 if (strokes.length > 0) {
                     undone.push(strokes.pop());
+                    console.log('undoing')
                     draw_canvas();
                 }
             }
             else if (e.key == 'y') {
                 if (undone.length > 0) {
                     strokes.push(undone.pop());
+                    console.log('redoing')
                     draw_canvas();
                 }
             }
