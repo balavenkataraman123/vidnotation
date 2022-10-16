@@ -146,22 +146,25 @@ var fps = {{ fps }};
 document.addEventListener('DOMContentLoaded', function () {
     const VIDEO = document.querySelector('#myVideo')
 
-    r = new XMLHttpRequest();
-    r.open('GET', `/annotations/{{ video }}`);
-    r.onload = () => {
-        try {
-            vid_overlays = JSON.parse(r.responseText);
-            try { document.querySelector('.no-annot').innerHTML = vid_overlays['annotations'].length; }
-            catch { document.querySelector('.no-annot').innerHTML = "0"; }
-            try { document.querySelector('.no-notes').innerHTML = vid_overlays['notes'].length; }
-            catch { document.querySelector('.no-notes').innerHTML = "0"; }
+    function get_annotations() {
+        r = new XMLHttpRequest();
+        r.open('GET', `/annotations/{{ video }}`);
+        r.onload = () => {
+            try {
+                vid_overlays = JSON.parse(r.responseText);
+                try { document.querySelector('.no-annot').innerHTML = vid_overlays['annotations'].length; }
+                catch { document.querySelector('.no-annot').innerHTML = "0"; }
+                try { document.querySelector('.no-notes').innerHTML = vid_overlays['notes'].length; }
+                catch { document.querySelector('.no-notes').innerHTML = "0"; }
 
-            VIDEO.requestVideoFrameCallback(draw_annotations)
+                VIDEO.requestVideoFrameCallback(draw_annotations)
+            }
+            catch {}
+            document.querySelector('.loading-screen').style.visibility = "hidden";
         }
-        catch {}
-        document.querySelector('.loading-screen').style.visibility = "hidden";
+        r.send();
     }
-    r.send();
+    get_annotations()
 
     const draw_annotations = (now, metadata) => {
         clear_annotation();
@@ -239,6 +242,8 @@ document.addEventListener('DOMContentLoaded', function () {
         r.onload = () => {
             if (r.responseText == 'OK') {
                 clear_annotation();
+                document.querySelector('.loading-screen').style.visibility = "visible";
+                get_annotations();
             }
             else
             {

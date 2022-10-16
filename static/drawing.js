@@ -141,7 +141,7 @@ window.addEventListener('load', function () {
                 pressure = 0.5;
                 break;
             }
-            
+
             context.strokeStyle = colour
             context.lineWidth = pressure * size;
 

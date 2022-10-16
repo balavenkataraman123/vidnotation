@@ -80,8 +80,8 @@ def get_range(request):
 @app.route('/annotate/', methods=['GET', 'POST'])
 def annotate():
     vid = request.args.get('video')
-    start = int(request.args.get('start'))
-    dur = int(request.args.get('dur'))
+    start = request.args.get('start')
+    dur = request.args.get('dur')
 
     if vid and start and dur:
         fp = f'.{vid}.json'
@@ -90,7 +90,7 @@ def annotate():
             except:  jf = {}
         else: jf = {}
 
-        strokes = {'start': start, 'dur': dur, 'end': start + dur, 'strokes': json.loads(request.data)['strokes']}
+        strokes = {'start': int(start), 'dur': int(dur), 'end': int(start) + int(dur), 'strokes': json.loads(request.data)['strokes']}
 
         try: jf['annotations'].append(strokes)
         except KeyError: jf['annotations'] = [strokes]
