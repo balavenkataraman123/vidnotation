@@ -1,3 +1,4 @@
+from genericpath import isfile
 import os
 import re
 import json
@@ -15,6 +16,14 @@ BUFF_SIZE = 10 * MB
 def home(video):
     response = render_template('index.html', path=f'{VIDEO_PATH}/{video}', video=video, fps=25)
     return response
+
+@app.route(f'/annotations/<video>/')
+def get_annotations(video):
+    path = f'.{VIDEO_PATH}/{video}.json'
+    if os.path.isfile(path):
+        with open(path) as f:
+            return f.read()
+
 
 def partial_response(path, start, end=None):
     file_size = os.path.getsize(path)
@@ -71,8 +80,8 @@ def get_range(request):
 @app.route('/annotate/', methods=['GET', 'POST'])
 def annotate():
     vid = request.args.get('video')
-    start = request.args.get('start')
-    dur = request.args.get('dur')
+    start = int(request.args.get('start'))
+    dur = int(request.args.get('dur'))
 
     if vid and start and dur:
         fp = f'.{vid}.json'
@@ -89,9 +98,6 @@ def annotate():
         with open(fp, 'w+') as f: f.write(json.dumps(jf))
 
         return "OK"
-@app.route('/', methods=['GET', 'POST'])
-    
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000, debug=True)

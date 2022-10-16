@@ -14,7 +14,7 @@
 
     <div class="sidebar" style="display: none;">
         <h1 class="video-name">{{ video }}</h1>
-        <span class="video-info"><span class="no-annot">_</span>&nbspAnnotations | <span class="no-notes">_</span>&nbspNotes</span>
+        <span class="video-info"><span class="no-annot">_</span>&nbspAnnotation(s) | <span class="no-notes">_</span>&nbspNote(s)</span>
 
         <div class="create-buttons">
             <button class="annot-now-btn create-btn">Annotate</button>
@@ -131,13 +131,53 @@
         </div>
     </div>
 
+    <div class="loading-screen">
+        <div class="lds-dual-ring"></div>
+    </div>
+
     <script src="{{ url_for('static', filename='drawing.js') }}"></script>
 </body>
 
 <script>
+var vid_overlays = {};
+var block_sidebar = false;
+var fps = {{ fps }};
+
 document.addEventListener('DOMContentLoaded', function () {
-    var block_sidebar = false;
-    var fps = {{ fps }};
+    const VIDEO = document.querySelector('#myVideo')
+
+    r = new XMLHttpRequest();
+    r.open('GET', `/annotations/{{ video }}`);
+    r.onload = () => {
+        try {
+            vid_overlays = JSON.parse(r.responseText);
+            try { document.querySelector('.no-annot').innerHTML = vid_overlays['annotations'].length; }
+            catch { document.querySelector('.no-annot').innerHTML = "0"; }
+            try { document.querySelector('.no-notes').innerHTML = vid_overlays['notes'].length; }
+            catch { document.querySelector('.no-notes').innerHTML = "0"; }
+
+            VIDEO.requestVideoFrameCallback(draw_annotations)
+        }
+        catch {}
+        document.querySelector('.loading-screen').style.visibility = "hidden";
+    }
+    r.send();
+
+    const draw_annotations = (now, metadata) => {
+        clear_annotation();
+        currframe = Math.floor(VIDEO.currentTime * fps)
+
+        var first = false;
+        for (annot of vid_overlays['annotations']) {
+            if (annot['start'] <= currframe && annot['end'] >= currframe) {
+                strokes = annot['strokes'];
+                draw_canvas(!first);
+                first = true;
+            }
+        }
+
+        VIDEO.requestVideoFrameCallback(draw_annotations);
+    }
 
     function clear_annotation () {
         clear();
@@ -148,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
         block_sidebar = false;
     }
 
-    document.querySelector('#myVideo').addEventListener('mousemove', function() {
+    VIDEO.addEventListener('mousemove', function() {
         if (!block_sidebar) {
             if (document.querySelector('.sidebar').style.display != "block") {
                 document.querySelector('.sidebar').style.display = "block";
@@ -169,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
         block_sidebar = true;
         document.querySelector('.sidebar').style.display = "none";
 
-        document.querySelector('#myVideo').pause();
+        VIDEO.pause();
     }
 
     document.querySelector('.cancel-annotation').onclick = function() {
@@ -195,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     document.querySelector('.s-ann-save').onclick = function () {
         r = new XMLHttpRequest();
-        r.open('POST', `/annotate/?video={{ path }}&start=${ Math.floor(document.querySelector('#myVideo').currentTime * fps) }&dur=${ Math.floor(document.querySelector('#ann-length-frame').value) }`);
+        r.open('POST', `/annotate/?video={{ path }}&start=${ Math.floor(VIDEO.currentTime * fps) }&dur=${ Math.floor(document.querySelector('#ann-length-frame').value) }`);
         r.onload = () => {
             if (r.responseText == 'OK') {
                 clear_annotation();

@@ -43,8 +43,8 @@ function midpoint(p1, p2) {
     };
 }
 
-function draw_canvas() {
-    context.canvas.width = context.canvas.width;
+function draw_canvas(clear=true) {
+    if (clear) { context.canvas.width = context.canvas.width; }
     for (stroke of strokes) {
         context.fillStyle = stroke.colour;
         context.strokeStyle = stroke.colour;
@@ -214,21 +214,17 @@ window.addEventListener('load', function () {
 }, true);
 
 document.onkeydown = function (e) {
-    if (document.querySelector('.drawing-controls').style.visibility == 'visible') {
-        if (e.ctrlKey) {
-            if (e.key == 'z') {
-                if (strokes.length > 0) {
-                    undone.push(strokes.pop());
-                    console.log('undoing')
-                    draw_canvas();
-                }
+    if (e.ctrlKey) {
+        if (e.key == 'z') {
+            if (strokes.length > 0) {
+                undone.push(strokes.pop());
+                draw_canvas();
             }
-            else if (e.key == 'y') {
-                if (undone.length > 0) {
-                    strokes.push(undone.pop());
-                    console.log('redoing')
-                    draw_canvas();
-                }
+        }
+        else if (e.key == 'y') {
+            if (undone.length > 0) {
+                strokes.push(undone.pop());
+                draw_canvas();
             }
         }
     }
