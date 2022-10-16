@@ -90,6 +90,9 @@ def annotate():
         with open(fp, 'w+') as f: f.write(json.dumps(jf))
 
         return "OK"
+@app.route('/', methods=['GET', 'POST'])
+    
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000, debug=True)
